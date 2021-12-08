@@ -16,17 +16,17 @@ CGO_LDFLAGS += "--sysroot=${STAGING_DIR_TARGET} -L${STAGING_LIBDIR}"
 LICENSE = "Apache-2"
 LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/LICENSE.txt;md5=00294979737b05a575493ff7b723f25c"
 
-# PV = "7.13.2"
-SRCREV = "${AUTOREV}"
+# PV = "7.15.2"
+SRCREV = "fd322dad6ceafec40c84df4d2a0694ea357d16cc"
 
 FILESEXTRAPATHS:append = "${THISDIR}/elastic-beats:"
 
 SRC_URI = " \
-        git://${GO_IMPORT}.git;protocol=https;branch=7.13 \
+        git://${GO_IMPORT}.git;protocol=https;branch=7.15 \
         file://${GO_PACKAGE}.yml \
         "
 
-RDEPENDS:${PN}-dev += "bash"
+RDEPENDS:${PN} += "bash"
 
 do_compile() {
     cd ${GO_PACKAGE}
@@ -40,11 +40,11 @@ do_compile() {
 do_install() {
     create_exec_script
 
-	install -d ${D}${bindir}/
-	install -m 0755 ${WORKDIR}/${GO_PACKAGE} ${D}${bindir}
+    install -d ${D}${bindir}/
+    install -m 0755 ${WORKDIR}/${GO_PACKAGE} ${D}${bindir}
 
-    install -d ${D}${datadir}/${GO_PACKAGE}
-	install -m 0755 ${BEAT_FOLDER}/${GO_PACKAGE} ${D}${datadir}/${GO_PACKAGE}
+    install -d ${D}${datadir}/${GO_PACKAGE}/bin
+    install -m 0755 ${BEAT_FOLDER}/${GO_PACKAGE} ${D}${datadir}/${GO_PACKAGE}/bin
 
     install -d ${D}${sysconfdir}/${GO_PACKAGE}
     install -m 0755 ${WORKDIR}/${GO_PACKAGE}.yml ${D}${sysconfdir}/${GO_PACKAGE}/${GO_PACKAGE}.yml
@@ -64,7 +64,7 @@ create_exec_script() {
 # Script to run ${GO_PACKAGE} in foreground with the same path settings that
 # the init script / systemd unit file would do.
 
-exec ${datadir}/${GO_PACKAGE}/${GO_PACKAGE} \\
+exec ${datadir}/${GO_PACKAGE}/bin/${GO_PACKAGE} \\
   --path.home ${datadir}/${GO_PACKAGE} \\
   --path.config ${sysconfdir}/${GO_PACKAGE} \\
   --path.data ${localstatedir}/lib/${GO_PACKAGE} \\
