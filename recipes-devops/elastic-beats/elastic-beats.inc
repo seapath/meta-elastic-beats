@@ -19,14 +19,14 @@ LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/LICENSE.txt;md5=00294979737b05a57549
 # PV = "7.15.2"
 SRCREV = "fd322dad6ceafec40c84df4d2a0694ea357d16cc"
 
-FILESEXTRAPATHS:append = "${THISDIR}/elastic-beats:"
+FILESEXTRAPATHS_append = "${THISDIR}/elastic-beats:"
 
 SRC_URI = " \
         git://${GO_IMPORT}.git;protocol=https;branch=7.15 \
         file://${GO_PACKAGE}.yml \
         "
 
-RDEPENDS:${PN} += "bash"
+RDEPENDS_${PN} += "bash"
 
 do_compile() {
     cd ${GO_PACKAGE}
@@ -77,7 +77,7 @@ EOF
     chmod +x ${WORKDIR}/${GO_PACKAGE}
 }
 
-FILES:${PN} += " \
+FILES_${PN} += " \
         ${datadir} \
         ${sysconfdir} \
 "
